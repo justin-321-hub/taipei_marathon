@@ -203,6 +203,12 @@ async function sendText(text) {
     const botMsg = { id: uid(), role: "assistant", text: replyText, ts: Date.now() };
     messages.push(botMsg);
 
+    // ★ 新增：檢查 botMsg.text 是否為空，如果為空則設定預設訊息
+    if (!botMsg.text || botMsg.text.trim() === "") {
+    botMsg.text = "抱歉，我不太理解您的意思，請換個說法，謝謝您";
+   }
+
+messages.push(botMsg);
     // 關閉思考中 → 再渲染
     setThinking(false);
     render();
@@ -257,6 +263,7 @@ messages.push({
   ts: Date.now(),
 });
 render();
+
 
 
 
