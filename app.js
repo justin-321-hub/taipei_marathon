@@ -145,7 +145,7 @@ async function sendText(text) {
         "Content-Type": "application/json",
         "X-Client-Id": clientId,
       },
-      body: JSON.stringify({ text: content, clientId , language: "繁體中文"}),
+      body: JSON.stringify({ text: content, clientId, language: "繁體中文" }),
     });
 
     // 以文字讀回（避免直接 .json() 遇到空字串拋錯）
@@ -174,10 +174,12 @@ async function sendText(text) {
     }
 
     /**
-     * ★ 關鍵：整理機器人要顯示的文字
+     * ★ 修正：整理機器人要顯示的文字
      * 規則：
      * 1) 若 data 是字串，直接當回覆
-     * 2) 若 data 是物件，優先用 data.text 或 data.message
+     * 2) 若 data 是物件且有 text 或 message 欄位：
+     *    - 如果內容為空字串 → 顯示「請換個說法，謝謝您」
+     *    - 如果有內容 → 顯示該內容
      * 3) 若是空物件 {} → 顯示「網路不穩定，請再試一次」
      * 4) 其他物件 → JSON 字串化後顯示（利於除錯）
      */
@@ -226,8 +228,7 @@ async function sendText(text) {
     // 推入機器人訊息
     const botMsg = { id: uid(), role: "assistant", text: replyText, ts: Date.now() };
     messages.push(botMsg);
-
-messages.push(botMsg);
+    
     // 關閉思考中 → 再渲染
     setThinking(false);
     render();
@@ -240,7 +241,7 @@ messages.push(botMsg);
       // 若使用者裝置離線，提供更直覺提示
       (!navigator.onLine && "目前處於離線狀態，請檢查網路連線後再試一次") ||
       // 其他錯誤，帶上簡短錯誤說明
-      `${err?.message || err}`;//取得回覆時發生錯誤：
+      `${err?.message || err}`;
 
     const botErr = {
       id: uid(),
@@ -282,10 +283,3 @@ messages.push({
   ts: Date.now(),
 });
 render();
-
-
-
-
-
-
-
