@@ -181,23 +181,46 @@ async function sendText(text) {
      * 3) 若是空物件 {} → 顯示「網路不穩定，請再試一次」
      * 4) 其他物件 → JSON 字串化後顯示（利於除錯）
      */
-     let replyText;
-     if (typeof data === "string") {
-     replyText = data.trim() || "請換個說法，謝謝您";
-     } else if (data && (data.text || data.message)) {
-     const originalText = String(data.text || data.message);
-     replyText = originalText.trim() || "請換個說法，謝謝您";
-     } else {
-      // data 不是字串，也沒有 text/message 欄位
-      const isPlainEmptyObject =
-        data &&
-        typeof data === "object" &&
-        !Array.isArray(data) &&
-        Object.keys(data).length === 0;
-
-      replyText = isPlainEmptyObject
-        ? "網路不穩定，請再試一次" // ★ 新增規則
-        : JSON.stringify(data, null, 2); // 顯示完整物件，便於除錯
+    let replyText;
+    
+    if (typeof data === "string") {
+      // 情況1: data 本身就是字串
+      replyText = data.trim() || "請換個說法，謝謝您";
+    } else if (data && typeof data === "object") {
+      // 情況2: data 是物件
+      
+      // 檢查是否有 text 或 message 欄位
+      const hasTextField = 'text' in data || 'message' in data;
+      
+      if (hasTextField) {
+        // 有 text 或 message 欄位，取出其值
+        const textValue = data.text !== undefined ? data.text : data.message;
+        
+        // 確保是字串並處理空值情況
+        if (textValue === "" || textValue === null || textValue === undefined) {
+          // ★ 關鍵修正：當 text 欄位存在但為空時，顯示「請換個說法，謝謝您」
+          replyText = "請換個說法，謝謝您";
+        } else {
+          // 有實際內容時顯示內容
+          replyText = String(textValue).trim() || "請換個說法，謝謝您";
+        }
+      } else {
+        // 沒有 text 或 message 欄位
+        const isPlainEmptyObject = 
+          !Array.isArray(data) && 
+          Object.keys(data).filter(k => k !== 'clientId').length === 0;
+        
+        if (isPlainEmptyObject) {
+          // 空物件或只有 clientId 的物件
+          replyText = "網路不穩定，請再試一次";
+        } else {
+          // 其他物件，顯示 JSON 便於除錯
+          replyText = JSON.stringify(data, null, 2);
+        }
+      }
+    } else {
+      // 其他非預期的資料型態
+      replyText = "請換個說法，謝謝您";
     }
 
     // 推入機器人訊息
@@ -259,6 +282,7 @@ messages.push({
   ts: Date.now(),
 });
 render();
+
 
 
 
