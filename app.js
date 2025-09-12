@@ -183,9 +183,10 @@ async function sendText(text) {
      */
     let replyText;
     if (typeof data === "string") {
-      replyText = data.trim() || "（空白回覆）";
+      replyText = data.trim() || "抱歉，我不太理解您的意思，請換個說法，謝謝您";
     } else if (data && (data.text || data.message)) {
-      replyText = String(data.text || data.message);
+       const originalText = String(data.text || data.message);
+       replyText = String(data.text || data.message);
     } else {
       // data 不是字串，也沒有 text/message 欄位
       const isPlainEmptyObject =
@@ -202,11 +203,6 @@ async function sendText(text) {
     // 推入機器人訊息
     const botMsg = { id: uid(), role: "assistant", text: replyText, ts: Date.now() };
     messages.push(botMsg);
-
-    // ★ 新增：檢查 botMsg.text 是否為空，如果為空則設定預設訊息
-    if (!botMsg.text || botMsg.text.trim() === "") {
-    botMsg.text = "抱歉，我不太理解您的意思，請換個說法，謝謝您";
-   }
 
 messages.push(botMsg);
     // 關閉思考中 → 再渲染
@@ -263,6 +259,7 @@ messages.push({
   ts: Date.now(),
 });
 render();
+
 
 
 
