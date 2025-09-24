@@ -127,7 +127,7 @@ function processQuestionMarks(text) {
 function processScoreQueryResponse(text) {
   // 定義成績查詢的關鍵詞
   const scoreKeywords = ['成績查詢', '查詢成績', '比賽成績', '馬拉松成績', '查成績'];
-  const scoreQueryUrl = 'https://www.sportsnet.org.tw/score.php';
+  const scoreQueryUrl = 'https://www.sportsnet.org.tw/score.php ';
   
   // 檢查是否包含成績查詢相關關鍵詞
   const hasScoreQuery = scoreKeywords.some(keyword => text.includes(keyword));
@@ -174,7 +174,7 @@ function processScoreQueryResponse(text) {
 function processWeatherResponse(text) {
   // 定義中央氣象局的關鍵詞
   const weatherKeywords = ['中央氣象局', '中央氣象署', '氣象局'];
-  const weatherUrl = 'https://www.cwa.gov.tw/V8/C/W/Town/Town.html?TID=6300200';
+  const weatherUrl = 'https://www.cwa.gov.tw/V8/C/W/Town/Town.html?TID=6300200 ';
   
   // 檢查是否包含中央氣象局相關關鍵詞
   const hasWeatherKeyword = weatherKeywords.some(keyword => text.includes(keyword));
@@ -221,7 +221,7 @@ function processWeatherResponse(text) {
 function processExpoResponse(text) {
   // 定義馬拉松運動博覽會的關鍵詞
   const expoKeywords = ['馬拉松運動博覽會', '運動博覽會', '馬拉松博覽會', 'EXPO'];
-  const expoUrl = 'https://marathonexpo.tw/';
+  const expoUrl = 'https://marathonexpo.tw/ ';
   
   // 檢查是否包含博覽會相關關鍵詞
   const hasExpoKeyword = expoKeywords.some(keyword => text.includes(keyword));
