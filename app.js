@@ -230,7 +230,7 @@ async function sendText(text) {
         text: contentToSend,  // ★ 使用已處理問號的內容
         clientId, 
         language: "繁體中文",
-        role:user
+        role: "user"
       }),
     });
 
