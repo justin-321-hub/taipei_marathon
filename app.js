@@ -229,7 +229,8 @@ async function sendText(text) {
       body: JSON.stringify({ 
         text: contentToSend,  // ★ 使用已處理問號的內容
         clientId, 
-        language: "繁體中文" 
+        language: "繁體中文",
+        role:user
       }),
     });
 
